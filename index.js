@@ -5,7 +5,6 @@ const axios = require("axios");
 const SLACK_TOKEN = process.env.SLACK_TOKEN;
 console.log(SLACK_TOKEN);
 const bot = new SlackBot({
-  
   token: SLACK_TOKEN,
   name: "MyPlazze Bakery"
 });
@@ -29,7 +28,7 @@ bot.on("message", data => {
 
 function handleMessage(message) {
   if (message.includes("<@UJ1V5UJ3T>")) {
-    if (message.includes(" specials")) {
+    if (message.includes(" specials") || message.includes("special")) {
       textSpecials();
     } else if (message.includes(" address") || message.includes(" location")) {
       textLocation();
@@ -51,6 +50,14 @@ function handleMessage(message) {
       textHelp();
     } else if (message.includes(" weather") || message.includes(" rain")) {
       textWeather();
+    } else if (
+      message.includes(" hello") ||
+      message.includes(" hi") ||
+      message.includes(" hey")
+    ) {
+      textHi();
+    } else if (message.includes(" hours") || message.includes(" open")) {
+      textHours();
     } else {
       bot.postMessageToChannel(
         "general",
@@ -107,22 +114,36 @@ function textHelp() {
   );
 }
 
+function textHi() {
+  bot.postMessageToChannel(
+    "general",
+    "Hi there! I am the MyPlazze Bakery bot.  Ask me questions about our business and I'll reply back to you as best as I can! "
+  );
+}
+
+function textHours() {
+  bot.postMessageToChannel(
+    "general",
+    "Our business hours are:  Moday - Friday from 8am - 6pm, On Saturdays we are open from 9am - 3pm"
+  );
+}
+
 function textWeather() {
   axios
     .get(
-      "https://api.darksky.net/forecast/97721ff51bc89cb50568aad7ee49c3d0/42.3601,-3.0589"
+      "https://api.darksky.net/forecast/97721ff51bc89cb50568aad7ee49c3d0/40.4167,-3.7037"
     )
     .then(res => {
-      const weather = res.data.minutely;
-      console.log(res.data.minutely);
-
+      const curWeather = res.data.currently.summary;
+      const curTemp = res.data.currently.temperature;
+      const curTempCelsius = (curTemp - 32) / 1.8;
       const params = {
-        icon_emoji: ":weather:"
+  
       };
 
       bot.postMessageToChannel(
         "general",
-        `You're going to LOVE today's special!!! It's none other than: ${weather}`,
+        `The current weather in Madrid is ${curWeather} and the temperature is ${curTempCelsius.toFixed(1)}º Celsius`,
         params
       );
     });
