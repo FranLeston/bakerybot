@@ -1,0 +1,19 @@
+{
+  "name": "slackbot",
+  "version": "1.0.0",
+  "description": "slackbot for MyPlazze Bakery",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "DEBUG=users-api:* nodemon ./bin/www"
+  },
+  "author": "Francisco Leston",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "slackbots": "^1.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.11"
+  }
+}
