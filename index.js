@@ -1,8 +1,12 @@
+require("dotenv").config();
+
 const SlackBot = require("slackbots");
 const axios = require("axios");
-
+const SLACK_TOKEN = process.env.SLACK_TOKEN;
+console.log(SLACK_TOKEN);
 const bot = new SlackBot({
-  token: "xoxb-608845488691-613991970129-0tUz4CSH7nWFaHJIItEGBhUH",
+  
+  token: SLACK_TOKEN,
   name: "MyPlazze Bakery"
 });
 
@@ -45,8 +49,8 @@ function handleMessage(message) {
       textMenu();
     } else if (message.includes(" help")) {
       textHelp();
-     } else if (message.includes(" weather") || message.includes(" rain")) {
-        textWeather();
+    } else if (message.includes(" weather") || message.includes(" rain")) {
+      textWeather();
     } else {
       bot.postMessageToChannel(
         "general",
@@ -106,10 +110,11 @@ function textHelp() {
 function textWeather() {
   axios
     .get(
-      "https://api.darksky.net/forecast/97721ff51bc89cb50568aad7ee49c3d0/42.3601,-3.0589")
+      "https://api.darksky.net/forecast/97721ff51bc89cb50568aad7ee49c3d0/42.3601,-3.0589"
+    )
     .then(res => {
       const weather = res.data.minutely;
-      console.log(res.data.minutely)
+      console.log(res.data.minutely);
 
       const params = {
         icon_emoji: ":weather:"
